@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ITR Filing Assistance – AY 2026-27</title>
+<style>
+  :root {
+    --navy: #0d2f6e;
+    --blue: #1a56c4;
+    --light-blue: #e8f0fe;
+    --accent: #f4a900;
+    --green: #1a7a3c;
+    --green-light: #e6f4ec;
+    --border: #c3d3ee;
+    --text: #1a1a2e;
+    --muted: #5a6a8a;
+    --red: #c62828;
+    --white: #ffffff;
+    --bg: #f0f4fb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: linear-gradient(135deg, #0a1f52 0%, #1a56c4 60%, #0d2f6e 100%);
+    color: white;
+    padding: 28px 24px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 40px,
+      rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 41px
+    );
+  }
+  .header-flag {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    margin-bottom: 10px; font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; color: #a8c0ff; position: relative;
+  }
+  .emblem { font-size: 36px; }
+  .site-header h1 {
+    font-size: 22px; font-weight: 700; letter-spacing: 0.5px; position: relative;
+  }
+  .site-header h2 {
+    font-size: 14px; font-weight: 400; color: #c8d8ff;
+    margin-top: 6px; position: relative;
+  }
+  .ay-badge {
+    display: inline-block; background: var(--accent);
+    color: #1a1a2e; font-weight: 700; font-size: 13px;
+    padding: 4px 14px; border-radius: 20px; margin-top: 10px;
+    position: relative;
+  }
+
+  /* ── LAYOUT ── */
+  .main-wrap {
+    max-width: 980px; margin: 0 auto; padding: 24px 16px 40px;
+  }
+
+  /* ── SECTION CARD ── */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(26,86,196,0.06);
+  }
+  .card-header {
+    background: var(--navy);
+    color: white;
+    padding: 14px 20px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 15px; font-weight: 600;
+  }
+  .card-header .icon { font-size: 18px; }
+  .card-body { padding: 22px 20px; }
+
+  /* ── FORM GRID ── */
+  .form-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+
+  label {
+    font-weight: 600; font-size: 13px; color: var(--navy);
+  }
+  .required-star { color: var(--red); margin-left: 2px; }
+
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="date"],
+  input[type="number"],
+  select, textarea {
+    width: 100%; padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px; color: var(--text);
+    background: white;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(26,86,196,0.1);
+  }
+  input.error { border-color: var(--red); }
+  .error-msg {
+    font-size: 11px; color: var(--red); display: none; margin-top: 2px;
+  }
+  .hint { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* ── CHECKBOXES (Income Sources) ── */
+  .checkbox-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px;
+  }
+  .checkbox-item {
+    display: flex; align-items: center; gap: 9px;
+    background: var(--light-blue); border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 10px 12px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .checkbox-item:hover { border-color: var(--blue); background: #d6e4fc; }
+  .checkbox-item input[type="checkbox"] {
+    width: 17px; height: 17px; accent-color: var(--blue);
+    flex-shrink: 0; cursor: pointer;
+  }
+  .checkbox-item label { font-weight: 500; cursor: pointer; margin: 0; color: var(--text); }
+
+  /* ── RADIO BUTTONS (Tax Regime) ── */
+  .regime-selector {
+    display: flex; gap: 16px; flex-wrap: wrap;
+  }
+  .regime-option {
+    flex: 1; min-width: 200px;
+    border: 2px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; cursor: pointer; position: relative;
+    transition: all 0.2s;
+  }
+  .regime-option:hover { border-color: var(--blue); }
+  .regime-option input[type="radio"] { position: absolute; opacity: 0; }
+  .regime-option.selected { border-color: var(--blue); background: var(--light-blue); }
+  .regime-label {
+    font-weight: 700; font-size: 15px; color: var(--navy); margin-bottom: 5px;
+  }
+  .regime-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .regime-badge {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    padding: 2px 8px; border-radius: 10px; margin-top: 5px;
+  }
+  .badge-new { background: #e8f5e9; color: var(--green); }
+  .badge-old { background: #fff3e0; color: #e65100; }
+
+  /* ── TAX CALCULATOR ── */
+  .calc-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+
+  .calc-btn {
+    background: var(--blue); color: white;
+    border: none; padding: 12px 28px;
+    border-radius: 8px; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .calc-btn:hover { background: var(--navy); }
+
+  .tax-result {
+    display: none;
+    background: var(--light-blue);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  .tax-result.visible { display: block; }
+
+  .result-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px; margin-bottom: 16px;
+  }
+  .result-box {
+    background: white; border-radius: 8px; padding: 14px;
+    border-left: 4px solid var(--blue);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .result-box.total { border-left-color: var(--navy); }
+  .result-box.rebate { border-left-color: var(--green); }
+  .result-box.payable { border-left-color: var(--accent); background: #fffde7; }
+  .result-box.nil { border-left-color: var(--green); background: var(--green-light); }
+
+  .result-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+  .result-value { font-size: 20px; font-weight: 700; color: var(--navy); }
+  .result-value.green { color: var(--green); }
+
+  .tax-slabs {
+    margin-top: 16px;
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  .slab-row {
+    display: grid; grid-template-columns: 2fr 1fr 1.5fr 1fr;
+    padding: 8px 14px; font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+  .slab-row:last-child { border-bottom: none; }
+  .slab-row.head {
+    background: var(--navy); color: white;
+    font-weight: 700; font-size: 12px;
+  }
+  .slab-row:not(.head):hover { background: #f0f4fb; }
+  .slab-row.active-slab { background: #e8f0fe; }
+
+  .disclaimer {
+    font-size: 11.5px; color: var(--muted);
+    border-top: 1px dashed var(--border);
+    padding-top: 12px; margin-top: 14px;
+    line-height: 1.7;
+  }
+  .disclaimer strong { color: var(--red); }
+
+  /* ── SUBMIT BUTTON ── */
+  .submit-btn {
+    background: linear-gradient(90deg, #1a7a3c, #26a354);
+    color: white; border: none;
+    padding: 14px 36px; border-radius: 10px;
+    font-size: 16px; font-weight: 700;
+    cursor: pointer; transition: opacity 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .submit-btn:hover { opacity: 0.9; }
+
+  /* ── SUCCESS BANNER ── */
+  .success-banner {
+    display: none; background: var(--green-light);
+    border: 2px solid var(--green);
+    border-radius: 10px; padding: 18px 22px;
+    margin-top: 16px; text-align: center;
+  }
+  .success-banner.visible { display: block; }
+  .success-banner h3 { color: var(--green); font-size: 16px; margin-bottom: 6px; }
+  .success-banner p { color: #2e7d32; font-size: 13px; }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    background: var(--navy); color: #c8d8ff;
+    text-align: center; padding: 20px;
+    font-size: 12px; line-height: 1.8;
+  }
+  .site-footer strong { color: white; }
+
+  /* ── INFO STRIP ── */
+  .info-strip {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .info-pill {
+    background: white; border: 1px solid var(--border);
+    border-radius: 20px; padding: 6px 14px;
+    font-size: 12px; color: var(--navy); font-weight: 600;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  @media (max-width: 680px) {
+    .form-grid, .calc-inputs { grid-template-columns: 1fr; }
+    .regime-selector { flex-direction: column; }
+    .slab-row { font-size: 11px; padding: 6px 8px; }
+    .result-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<div class="site-header">
+  <div class="emblem">⚖️</div>
+  <h1>Income Tax Return (ITR) Filing Assistance</h1>
+  <h2>For Individual Salaried Taxpayers &nbsp;|&nbsp; Secured Client Intake Form</h2>
+  <div class="ay-badge">Assessment Year 2026 – 27 &nbsp;(FY 2025-26)</div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div class="main-wrap">
+
+  <div class="info-strip">
+    <div class="info-pill">🔒 Secure Form (POST method)</div>
+    <div class="info-pill">📅 Due Date: 31 July 2026</div>
+    <div class="info-pill">📊 Auto-saves to Google Sheet</div>
+    <div class="info-pill">✅ AY 2026-27 Calculator Built-in</div>
+  </div>
+
+  <!-- ══ SECTION 1: Basic Details ══ -->
+  <div class="card">
+    <div class="card-header"><span class="icon">👤</span> Basic Personal Details</div>
+    <div class="card-body">
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Full Name (as per PAN)<span class="required-star">*</span></label>
+          <input type="text" id="fullName" name="fullName" placeholder="e.g. RAMESH KUMAR SHARMA" style="text-transform:uppercase" required>
+          <span class="hint">Enter name exactly as on your PAN card (capital letters)</span>
+          <span class="error-msg" id="err-fullName">Please enter your full name.</span>
+        </div>
+
+        <div class="form-group">
+          <label>PAN Number<span class="required-star">*</span></label>
+          <input type="text" id="pan" name="pan" placeholder="e.g. ABCDE1234F"
+            maxlength="10" style="text-transform:uppercase; letter-spacing:2px;" required>
+          <span class="hint">Format: 5 letters + 4 digits + 1 letter (e.g. ABCDE1234F)</span>
+          <span class="error-msg" id="err-pan">Invalid PAN. Format must be XXXXX9999X (e.g. ABCDE1234F)</span>
+        </div>
+
+        <div class="form-group">
+          <label>Mobile Number<span class="required-star">*</span></label>
+          <input type="tel" id="mobile" name="mobile" placeholder="e.g. 9876543210"
+            maxlength="10" required>
+          <span class="hint">10-digit Indian mobile number (no +91 prefix needed)</span>
+          <span class="error-msg" id="err-mobile">Enter a valid 10-digit mobile number starting with 6-9.</span>
+        </div>
+
+        <div class="form-group">
+          <label>Email ID</label>
+          <input type="email" id="email" name="email" placeholder="e.g. ramesh@example.com">
+          <span class="hint">For receiving acknowledgment and updates</span>
+          <span class="error-msg" id="err-email">Enter a valid email address.</span>
+        </div>
+
+        <div class="form-group">
+          <label>Date of Birth<span class="required-star">*</span></label>
+          <input type="date" id="dob" name="dob" required>
+          <span class="hint">As per PAN / Aadhaar records</span>
+        </div>
+
+        <div class="form-group">
+          <label>Aadhaar Number</label>
+          <input type="text" id="aadhaar" name="aadhaar" placeholder="e.g. 1234 5678 9012"
+            maxlength="14">
+          <span class="hint">12-digit Aadhaar (spaces auto-added for readability)</span>
+          <span class="error-msg" id="err-aadhaar">Aadhaar must be exactly 12 digits.</span>
+        </div>
+
+        <div class="form-group">
+          <label>Aadhaar Linked with PAN?<span class="required-star">*</span></label>
+          <select id="aadhaarLinked" name="aadhaarLinked">
+            <option value="">— Select —</option>
+            <option value="Yes">Yes – Linked</option>
+            <option value="No">No – Not Linked (₹1,000 penalty may apply)</option>
+            <option value="Pending">Link Request Pending</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Residential Status (FY 2025-26)</label>
+          <select id="residentialStatus" name="residentialStatus">
+            <option value="Resident">Resident (ROR)</option>
+            <option value="RNOR">Resident but Not Ordinarily Resident (RNOR)</option>
+            <option value="NRI">Non-Resident Indian (NRI)</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 2: Income Details ══ -->
+  <div class="card">
+    <div class="card-header"><span class="icon">💼</span> Income Sources &amp; Details</div>
+    <div class="card-body">
+
+      <div class="form-group" style="margin-bottom:18px;">
+        <label>Select All Applicable Income Sources<span class="required-star">*</span></label>
+        <span class="hint" style="margin-bottom:10px; display:block;">Check all that apply for FY 2025-26</span>
+        <div class="checkbox-grid" id="incomeSourceGrid">
+          <div class="checkbox-item">
+            <input type="checkbox" id="src-salary" name="incomeSource[]" value="Salary">
+            <label for="src-salary">💰 Salary / Pension</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="src-hra" name="incomeSource[]" value="HRA">
+            <label for="src-hra">🏠 HRA Claimed</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="src-interest" name="incomeSource[]" value="Interest Income">
+            <label for="src-interest">🏦 Interest Income (FD/SB)</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="src-houseprop" name="incomeSource[]" value="House Property / Rent">
+            <label for="src-houseprop">🏘️ House Property / Rent</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="src-capgains" name="incomeSource[]" value="Capital Gains">
+            <label for="src-capgains">📈 Capital Gains (Equity/MF)</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="src-crypto" name="incomeSource[]" value="Crypto / VDA">
+            <label for="src-crypto">₿ Crypto / VDA (30% tax)</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="src-fno" name="incomeSource[]" value="F&O / Intraday">
+            <label for="src-fno">📊 F&amp;O / Intraday Trading</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="src-other" name="incomeSource[]" value="Other Sources">
+            <label for="src-other">📋 Other Sources / Gifts</label>
+          </div>
+        </div>
+        <span class="error-msg" id="err-incomeSource">Please select at least one income source.</span>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Gross Salary / Total Income (FY 2025-26)<span class="required-star">*</span></label>
+          <input type="number" id="grossIncome" name="grossIncome" placeholder="e.g. 800000" min="0">
+          <span class="hint">Enter full amount in ₹ (before any deductions)</span>
+        </div>
+
+        <div class="form-group">
+          <label>TDS Already Deducted (from Form 26AS)</label>
+          <input type="number" id="tdsDeducted" name="tdsDeducted" placeholder="e.g. 50000" min="0">
+          <span class="hint">Total TDS reflected in Form 26AS / AIS</span>
+        </div>
+
+        <div class="form-group">
+          <label>Documents Available</label>
+          <select id="sharedVia" name="sharedVia">
+            <option value="Form 16">Form 16 (Part A &amp; B)</option>
+            <option value="Form 16A">Form 16A</option>
+            <option value="Form 26AS">Form 26AS only</option>
+            <option value="AIS / TIS">AIS / TIS (downloaded)</option>
+            <option value="Salary Slip">Salary Slip</option>
+            <option value="Broker Statement">Broker / Capital Gain Statement</option>
+            <option value="Bank Statement">Bank Statement</option>
+            <option value="Not Shared Yet">Not Shared Yet</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Document Upload Status</label>
+          <select id="documentStatus" name="documentStatus">
+            <option value="Complete">✅ Complete – All docs shared</option>
+            <option value="Partially Shared">⚠️ Partial – Some docs pending</option>
+            <option value="Pending">❌ Pending – Will share later</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group full" style="margin-top:14px;">
+        <label>Additional Notes / Remarks</label>
+        <textarea id="notes" name="notes" rows="3"
+          placeholder="Mention any special cases: foreign income, property sold, ESOPs vested, donations, home loan interest, etc."></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ SECTION 3: Tax Calculator ══ -->
+  <div class="card">
+    <div class="card-header"><span class="icon">🧮</span> Income Tax Calculator – AY 2026-27</div>
+    <div class="card-body">
+
+      <p style="color:var(--muted); margin-bottom:16px; font-size:13px;">
+        Calculate your estimated tax liability under Old or New Tax Regime for AY 2026-27 (FY 2025-26).
+      </p>
+
+      <!-- Regime Toggle -->
+      <div style="margin-bottom:18px;">
+        <label style="margin-bottom:10px; display:block;">Select Tax Regime<span class="required-star">*</span></label>
+        <div class="regime-selector" id="regimeSelector">
+          <div class="regime-option selected" id="opt-new" onclick="selectRegime('new')">
+            <input type="radio" name="regime" value="new" checked>
+            <div class="regime-label">🆕 New Tax Regime</div>
+            <div class="regime-desc">Lower flat rates, no most exemptions/deductions. Standard deduction of ₹75,000 allowed. Rebate u/s 87A up to ₹12,00,000.</div>
+            <span class="regime-badge badge-new">Default from AY 2024-25 onwards</span>
+          </div>
+          <div class="regime-option" id="opt-old" onclick="selectRegime('old')">
+            <input type="radio" name="regime" value="old">
+            <div class="regime-label">📜 Old Tax Regime</div>
+            <div class="regime-desc">Allows deductions under 80C, 80D, HRA, LTA, home loan interest etc. Rebate u/s 87A up to ₹5,00,000.</div>
+            <span class="regime-badge badge-old">Opt-in required for salaried</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calculator Inputs -->
+      <div class="calc-inputs">
+        <div class="form-group">
+          <label>Gross Total Income (₹)<span class="required-star">*</span></label>
+          <input type="number" id="calcIncome" placeholder="e.g. 1000000" min="0">
+          <span class="hint">Annual income before standard deduction</span>
+        </div>
+
+        <div class="form-group" id="deductionField">
+          <label>Total Deductions u/s 80C, 80D etc. (₹) <span style="font-weight:400; color:var(--muted)">(Old Regime only)</span></label>
+          <input type="number" id="calcDeductions" placeholder="Max ₹1,50,000 for 80C" min="0" max="500000">
+          <span class="hint">80C + 80D + 80TTA + HRA + other Chapter VI-A deductions</span>
+        </div>
+
+        <div class="form-group" id="hlField">
+          <label>Home Loan Interest (₹) <span style="font-weight:400; color:var(--muted)">(Old Regime – Sec 24b)</span></label>
+          <input type="number" id="calcHomeLoan" placeholder="Max ₹2,00,000 for self-occ." min="0" max="200000">
+          <span class="hint">Interest on self-occupied property (max ₹2 lakh)</span>
+        </div>
+
+        <div class="form-group">
+          <label>Age Category</label>
+          <select id="calcAge">
+            <option value="below60">Below 60 years</option>
+            <option value="senior">Senior Citizen (60–79 years)</option>
+            <option value="supersenior">Super Senior Citizen (80+ years)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="calc-btn" onclick="calculateTax()">⚡ Calculate Tax Now</button>
+
+      <!-- Result Panel -->
+      <div class="tax-result" id="taxResult">
+        <h3 style="color:var(--navy); margin-bottom:14px; font-size:15px;" id="resultTitle">Tax Calculation Result</h3>
+
+        <div class="result-grid" id="resultGrid"></div>
+
+        <!-- Slab Breakup -->
+        <div id="slabSection">
+          <p style="font-weight:600; color:var(--navy); margin-bottom:8px; font-size:13px;">📊 Slab-wise Tax Breakup</p>
+          <div class="tax-slabs">
+            <div class="slab-row head">
+              <span>Income Slab</span>
+              <span>Rate</span>
+              <span>Taxable Amount</span>
+              <span>Tax</span>
+            </div>
+            <div id="slabRows"></div>
+          </div>
+        </div>
+
+        <div class="disclaimer">
+          <strong>⚠️ Important Disclaimers:</strong><br>
+          • This calculator provides an <strong>estimated</strong> tax liability. Actual tax may differ based on specific deductions, exemptions, and income classification.<br>
+          • <strong>Interest u/s 234A, 234B, 234C</strong> may be applicable if advance tax is unpaid or return is filed after due date (31 July 2026). This calculator does not include interest amounts.<br>
+          • Crypto / VDA income is taxed at a flat <strong>30% + surcharge + cess</strong> separately and is not included here.<br>
+          • F&amp;O / speculative income may be treated as business income. Please consult your CA.<br>
+          • The tax liability shown here <strong>may vary</strong> from the figure computed on the Income Tax Portal based on your actual ITR data.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ SECTION 4: Submit ══ -->
+  <div class="card">
+    <div class="card-header"><span class="icon">📤</span> Submit Your Details</div>
+    <div class="card-body">
+
+      <div style="background:#fff8e1; border:1px solid #ffe082; border-radius:8px; padding:14px; margin-bottom:18px; font-size:13px;">
+        <strong>🔒 Privacy Notice:</strong> Your information is submitted securely via POST method and stored only in our authorized Google Sheet accessible only to our CA team. PAN and Aadhaar details are handled as per IT Act provisions.
+      </div>
+
+      <button class="submit-btn" onclick="submitForm()">
+        <span>🚀</span> Submit Details Securely
+      </button>
+
+      <div class="success-banner" id="successBanner">
+        <h3>✅ Details Submitted Successfully!</h3>
+        <p>Your information has been recorded. Our team will contact you within 24 working hours on your registered mobile/email.</p>
+        <p style="margin-top:8px; font-weight:600;">📋 Reference: <span id="refNumber"></span></p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-wrap -->
+
+<!-- ══ FOOTER ══ -->
+<div class="site-footer">
+  <strong>File on Time. Stay Compliant. Avoid Penalties.</strong><br>
+  ITR Filing Assistance – AY 2026-27 (FY 2025-26) &nbsp;|&nbsp; Due Date: 31 July 2026<br>
+  <span style="font-size:11px; color:#8fa8d8;">This is a client intake tool. This is not the official Income Tax Department portal. For official filing visit: incometax.gov.in</span>
+</div>
+
+<script>
+// ── GOOGLE APPS SCRIPT URL ──
+// Replace this with your deployed Apps Script Web App URL after setup
+const APPS_SCRIPT_URL = "YOUR_APPS_SCRIPT_URL";
+
+// ═══════════════════════════════════════════
+//  REGIME TOGGLE
+// ═══════════════════════════════════════════
+let selectedRegime = 'new';
+
+function selectRegime(regime) {
+  selectedRegime = regime;
+  document.getElementById('opt-new').classList.toggle('selected', regime === 'new');
+  document.getElementById('opt-old').classList.toggle('selected', regime === 'old');
+  document.querySelector(`input[value="${regime}"]`).checked = true;
+
+  // Show/hide old-regime-only fields
+  const showOld = regime === 'old';
+  document.getElementById('deductionField').style.opacity = showOld ? '1' : '0.4';
+  document.getElementById('hlField').style.opacity = showOld ? '1' : '0.4';
+  document.getElementById('calcDeductions').disabled = !showOld;
+  document.getElementById('calcHomeLoan').disabled = !showOld;
+
+  // Reset result
+  document.getElementById('taxResult').classList.remove('visible');
+}
+
+// init
+selectRegime('new');
+
+// ═══════════════════════════════════════════
+//  TAX CALCULATOR – AY 2026-27
+// ═══════════════════════════════════════════
+function fmt(n) {
+  return '₹' + Math.round(n).toLocaleString('en-IN');
+}
+
+function calculateTax() {
+  const grossIncome = parseFloat(document.getElementById('calcIncome').value) || 0;
+  const deductions  = parseFloat(document.getElementById('calcDeductions').value) || 0;
+  const homeLoan    = parseFloat(document.getElementById('calcHomeLoan').value) || 0;
+  const ageGroup    = document.getElementById('calcAge').value;
+  const regime      = selectedRegime;
+
+  if (grossIncome <= 0) {
+    alert('Please enter your Gross Total Income first.');
+    return;
+  }
+
+  let taxableIncome, basicTax, slabs, rebateLimit, maxRebate;
+  const slabRows = [];
+
+  // ── NEW REGIME ──
+  if (regime === 'new') {
+    const stdDed = 75000;
+    taxableIncome = Math.max(0, grossIncome - stdDed);
+    rebateLimit   = 1200000; // 87A: full rebate if income ≤ 12L
+    maxRebate     = 60000;   // max rebate
+
+    const newSlabs = [
+      { from: 0,       to: 400000,   rate: 0   },
+      { from: 400000,  to: 800000,   rate: 0.05 },
+      { from: 800000,  to: 1200000,  rate: 0.10 },
+      { from: 1200000, to: 1600000,  rate: 0.15 },
+      { from: 1600000, to: 2000000,  rate: 0.20 },
+      { from: 2000000, to: 2400000,  rate: 0.25 },
+      { from: 2400000, to: Infinity, rate: 0.30 },
+    ];
+
+    basicTax = 0;
+    for (const s of newSlabs) {
+      if (taxableIncome <= s.from) break;
+      const taxable = Math.min(taxableIncome, s.to) - s.from;
+      const tax = taxable * s.rate;
+      if (taxable > 0) {
+        slabRows.push({
+          label: s.to === Infinity
+            ? `Above ₹${(s.from/100000).toFixed(0)}L`
+            : `₹${(s.from/100000).toFixed(0)}L – ₹${(s.to/100000).toFixed(0)}L`,
+          rate: (s.rate * 100) + '%',
+          taxable,
+          tax,
+          active: taxableIncome > s.from
+        });
+      }
+      basicTax += tax;
+    }
+
+    slabs = newSlabs;
+
+  // ── OLD REGIME ──
+  } else {
+    let basicExemption = 250000;
+    if (ageGroup === 'senior')      basicExemption = 300000;
+    if (ageGroup === 'supersenior') basicExemption = 500000;
+
+    const totalDed = Math.min(deductions, 150000) + Math.min(homeLoan, 200000);
+    taxableIncome  = Math.max(0, grossIncome - totalDed);
+    rebateLimit    = 500000;
+    maxRebate      = 12500;
+
+    const oldSlabs = ageGroup === 'supersenior'
+      ? [
+          { from: 0,       to: 500000,  rate: 0    },
+          { from: 500000,  to: 1000000, rate: 0.20 },
+          { from: 1000000, to: Infinity,rate: 0.30 },
+        ]
+      : ageGroup === 'senior'
+      ? [
+          { from: 0,       to: 300000,  rate: 0    },
+          { from: 300000,  to: 500000,  rate: 0.05 },
+          { from: 500000,  to: 1000000, rate: 0.20 },
+          { from: 1000000, to: Infinity,rate: 0.30 },
+        ]
+      : [
+          { from: 0,       to: 250000,  rate: 0    },
+          { from: 250000,  to: 500000,  rate: 0.05 },
+          { from: 500000,  to: 1000000, rate: 0.20 },
+          { from: 1000000, to: Infinity,rate: 0.30 },
+        ];
+
+    basicTax = 0;
+    for (const s of oldSlabs) {
+      if (taxableIncome <= s.from) break;
+      const taxable = Math.min(taxableIncome, s.to) - s.from;
+      const tax = taxable * s.rate;
+      if (taxable > 0) {
+        slabRows.push({
+          label: s.to === Infinity
+            ? `Above ₹${(s.from/100000).toFixed(1)}L`
+            : `₹${(s.from/100000).toFixed(1)}L – ₹${(s.to/100000).toFixed(1)}L`,
+          rate: (s.rate * 100) + '%',
+          taxable,
+          tax,
+          active: taxableIncome > s.from
+        });
+      }
+      basicTax += tax;
+    }
+  }
+
+  // ── REBATE u/s 87A ──
+  let rebate = 0;
+  if (taxableIncome <= rebateLimit) {
+    rebate = Math.min(basicTax, maxRebate);
+  }
+  const taxAfterRebate = Math.max(0, basicTax - rebate);
+
+  // ── SURCHARGE ──
+  let surchargeRate = 0;
+  if (taxableIncome > 50000000)      surchargeRate = regime === 'new' ? 0.25 : 0.37;
+  else if (taxableIncome > 20000000) surchargeRate = 0.25;
+  else if (taxableIncome > 10000000) surchargeRate = 0.15;
+  else if (taxableIncome > 5000000)  surchargeRate = 0.10;
+  const surcharge = taxAfterRebate * surchargeRate;
+
+  // ── CESS ──
+  const cess = (taxAfterRebate + surcharge) * 0.04;
+
+  // ── TOTAL ──
+  const totalTax = taxAfterRebate + surcharge + cess;
+
+  // ── MARGINAL RELIEF check (new regime for ₹12–12.75L range) ──
+  let marginalRelief = 0;
+  if (regime === 'new' && taxableIncome > 1200000 && taxableIncome <= 1275000) {
+    // Tax should not exceed income above ₹12L
+    const excess = taxableIncome - 1200000;
+    const rawTax = totalTax;
+    if (rawTax > excess) {
+      marginalRelief = rawTax - excess;
+    }
+  }
+  const finalTax = Math.max(0, totalTax - marginalRelief);
+
+  // ── RENDER ──
+  const isNilTax = finalTax === 0;
+  const stdDedShown = regime === 'new' ? 75000 : 0;
+
+  document.getElementById('resultTitle').textContent =
+    `Tax Estimate – ${regime === 'new' ? 'New' : 'Old'} Regime – AY 2026-27`;
+
+  const grid = document.getElementById('resultGrid');
+  grid.innerHTML = `
+    <div class="result-box">
+      <div class="result-label">Gross Total Income</div>
+      <div class="result-value">${fmt(grossIncome)}</div>
+    </div>
+    ${regime === 'new' ? `
+    <div class="result-box">
+      <div class="result-label">Less: Standard Deduction</div>
+      <div class="result-value">– ${fmt(stdDedShown)}</div>
+    </div>` : `
+    <div class="result-box">
+      <div class="result-label">Less: Chapter VI-A Deductions</div>
+      <div class="result-value">– ${fmt(Math.min(deductions,150000) + Math.min(homeLoan,200000))}</div>
+    </div>`}
+    <div class="result-box">
+      <div class="result-label">Net Taxable Income</div>
+      <div class="result-value">${fmt(taxableIncome)}</div>
+    </div>
+    <div class="result-box">
+      <div class="result-label">Income Tax (before rebate)</div>
+      <div class="result-value">${fmt(basicTax)}</div>
+    </div>
+    <div class="result-box rebate">
+      <div class="result-label">Less: Rebate u/s 87A</div>
+      <div class="result-value green">– ${fmt(rebate)}</div>
+    </div>
+    <div class="result-box">
+      <div class="result-label">Tax after Rebate</div>
+      <div class="result-value">${fmt(taxAfterRebate)}</div>
+    </div>
+    <div class="result-box">
+      <div class="result-label">Surcharge ${surchargeRate > 0 ? '(' + (surchargeRate*100) + '%)' : ''}</div>
+      <div class="result-value">${fmt(surcharge)}</div>
+    </div>
+    <div class="result-box">
+      <div class="result-label">Health &amp; Education Cess (4%)</div>
+      <div class="result-value">${fmt(cess)}</div>
+    </div>
+    ${marginalRelief > 0 ? `
+    <div class="result-box rebate">
+      <div class="result-label">Marginal Relief</div>
+      <div class="result-value green">– ${fmt(marginalRelief)}</div>
+    </div>` : ''}
+    <div class="result-box ${isNilTax ? 'nil' : 'payable'}">
+      <div class="result-label">⭐ Total Tax Payable</div>
+      <div class="result-value ${isNilTax ? 'green' : ''}">${isNilTax ? 'NIL' : fmt(finalTax)}</div>
+    </div>
+  `;
+
+  // Slab rows
+  const slabContainer = document.getElementById('slabRows');
+  slabContainer.innerHTML = slabRows.map(s => `
+    <div class="slab-row ${s.active ? 'active-slab' : ''}">
+      <span>${s.label}</span>
+      <span>${s.rate}</span>
+      <span>${fmt(s.taxable)}</span>
+      <span>${fmt(s.tax)}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('taxResult').classList.add('visible');
+  document.getElementById('taxResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ═══════════════════════════════════════════
+//  FORM VALIDATION
+// ═══════════════════════════════════════════
+function showErr(id, show) {
+  document.getElementById('err-' + id).style.display = show ? 'block' : 'none';
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('error', show);
+}
+
+function validatePAN(val) {
+  return /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(val.toUpperCase());
+}
+function validateMobile(val) {
+  return /^[6-9][0-9]{9}$/.test(val);
+}
+function validateAadhaar(val) {
+  const digits = val.replace(/\s/g, '');
+  return digits === '' || /^[0-9]{12}$/.test(digits);
+}
+
+// Auto-format PAN to uppercase
+document.getElementById('pan').addEventListener('input', function() {
+  this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10);
+});
+
+// Auto-format mobile: digits only
+document.getElementById('mobile').addEventListener('input', function() {
+  this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+});
+
+// Auto-format Aadhaar with spaces
+document.getElementById('aadhaar').addEventListener('input', function() {
+  let digits = this.value.replace(/\D/g, '').slice(0, 12);
+  this.value = digits.replace(/(\d{4})(?=\d)/g, '$1 ');
+});
+
+// ═══════════════════════════════════════════
+//  FORM SUBMISSION → GOOGLE SHEETS
+// ═══════════════════════════════════════════
+function submitForm() {
+  let valid = true;
+
+  // Name
+  const name = document.getElementById('fullName').value.trim();
+  if (!name) { showErr('fullName', true); valid = false; } else showErr('fullName', false);
+
+  // PAN
+  const pan = document.getElementById('pan').value.trim();
+  if (!validatePAN(pan)) { showErr('pan', true); valid = false; } else showErr('pan', false);
+
+  // Mobile
+  const mobile = document.getElementById('mobile').value.trim();
+  if (!validateMobile(mobile)) { showErr('mobile', true); valid = false; } else showErr('mobile', false);
+
+  // Email (if filled)
+  const email = document.getElementById('email').value.trim();
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showErr('email', true); valid = false;
+  } else showErr('email', false);
+
+  // Aadhaar (if filled)
+  const aadhaar = document.getElementById('aadhaar').value.trim();
+  if (!validateAadhaar(aadhaar)) { showErr('aadhaar', true); valid = false; } else showErr('aadhaar', false);
+
+  // Income sources
+  const sources = [...document.querySelectorAll('input[name="incomeSource[]"]:checked')].map(c => c.value);
+  if (sources.length === 0) { showErr('incomeSource', true); valid = false; } else showErr('incomeSource', false);
+
+  if (!valid) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  // Build payload
+  const payload = {
+    timestamp:        new Date().toLocaleString('en-IN'),
+    fullName:         name,
+    pan:              pan.slice(0,2) + 'XXXXX' + pan.slice(7), // mask PAN
+    mobile:           mobile,
+    email:            email,
+    dob:              document.getElementById('dob').value,
+    aadhaarLinked:    document.getElementById('aadhaarLinked').value,
+    residentialStatus:document.getElementById('residentialStatus').value,
+    incomeSources:    sources.join(', '),
+    grossIncome:      document.getElementById('grossIncome').value,
+    tdsDeducted:      document.getElementById('tdsDeducted').value,
+    taxRegime:        selectedRegime === 'new' ? 'New Regime' : 'Old Regime',
+    sharedVia:        document.getElementById('sharedVia').value,
+    documentStatus:   document.getElementById('documentStatus').value,
+    notes:            document.getElementById('notes').value,
+  };
+
+  // Submit to Google Apps Script
+  if (APPS_SCRIPT_URL !== "YOUR_APPS_SCRIPT_URL") {
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode:   'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body:   JSON.stringify(payload)
+    }).catch(console.error);
+  }
+
+  // Show success
+  const ref = 'ITR' + Date.now().toString().slice(-6);
+  document.getElementById('refNumber').textContent = ref;
+  document.getElementById('successBanner').classList.add('visible');
+  document.querySelector('.submit-btn').disabled = true;
+  document.querySelector('.submit-btn').textContent = '✅ Submitted';
+  document.getElementById('successBanner').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
